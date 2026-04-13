@@ -168,6 +168,30 @@ std::vector<std::string> Graph::bfs(const std::string& start) const {
 std::vector<std::string> Graph::dfs(const std::string& start) const {
     std::vector<std::string> result;
     // TODO: implement DFS using a stack and visited set
+
+    if (!has_vertex(start)) return result;
+
+    std::stack<std::string> s;
+    std::unordered_set<std::string> visited;
+
+    s.push(start);
+
+    while (!s.empty()) {
+        std::string current = s.top();
+        s.pop();
+        if (visited.find(current) != visited.end()) {
+            continue;
+        }
+        visited.insert(current);
+        result.push_back(current);
+
+        const auto& nbrs = neighbors(current);
+        for (auto it = nbrs.rbegin(); it != nbrs.rend(); ++it) {
+            if (visited.find(*it) == visited.end()) {
+                s.push(*it);
+            }
+        }
+    }
     return result;
 }
 
